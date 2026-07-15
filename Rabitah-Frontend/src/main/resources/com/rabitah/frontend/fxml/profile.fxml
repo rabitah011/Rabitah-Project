@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.rabitah.frontend.controller.ProfileController"
+            styleClass="page">
+    <top>
+        <HBox spacing="16" styleClass="topbar">
+            <Button fx:id="backButton" text="← Back to Dashboard" onAction="#back"/>
+            <Label fx:id="profileTitle" text="My Profile" styleClass="brand-small"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label text="build 1.0.3" styleClass="build-label"/>
+        </HBox>
+    </top>
+    <center>
+        <StackPane>
+            <VBox spacing="18" styleClass="content-card">
+                <Label text="Account information" styleClass="section-title"/>
+                <GridPane hgap="24" vgap="15">
+                    <Label text="Nickname" GridPane.columnIndex="0" GridPane.rowIndex="0" styleClass="field-label"/>
+                    <Label fx:id="nicknameValue" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                    <Label text="Login ID" GridPane.columnIndex="0" GridPane.rowIndex="1" styleClass="field-label"/>
+                    <Label fx:id="loginIdValue" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                    <Label text="Student ID" GridPane.columnIndex="0" GridPane.rowIndex="2" styleClass="field-label"/>
+                    <Label fx:id="studentIdValue" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                    <Label text="Role" GridPane.columnIndex="0" GridPane.rowIndex="3" styleClass="field-label"/>
+                    <Label fx:id="roleValue" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                    <Label text="Department" GridPane.columnIndex="0" GridPane.rowIndex="4" styleClass="field-label"/>
+                    <Label fx:id="departmentValue" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+                    <Label text="Section" GridPane.columnIndex="0" GridPane.rowIndex="5" styleClass="field-label"/>
+                    <Label fx:id="sectionValue" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+                    <Label text="Academic year" GridPane.columnIndex="0" GridPane.rowIndex="6" styleClass="field-label"/>
+                    <Label fx:id="yearValue" GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+                </GridPane>
+            </VBox>
+        </StackPane>
+    </center>
+</BorderPane>

@@ -1,3 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.control.*?><?import javafx.scene.layout.*?>
-<StackPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.rabitah.frontend.controller.LoginController" styleClass="page"><VBox maxWidth="420" spacing="18" styleClass="card"><Label text="Rabitah" styleClass="brand"/><Label text="Campus social and academic platform" styleClass="muted"/><TextField fx:id="loginId" promptText="Student or system ID"/><PasswordField fx:id="password" promptText="Password" onAction="#login"/><Label fx:id="errorLabel" wrapText="true" styleClass="error"/><Button fx:id="loginButton" text="Sign in" defaultButton="true" maxWidth="Infinity" onAction="#login"/></VBox></StackPane>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<StackPane xmlns:fx="http://javafx.com/fxml"
+           fx:controller="com.rabitah.frontend.controller.LoginController"
+           styleClass="page">
+    <VBox maxWidth="420" spacing="18" styleClass="card">
+        <Label text="Rabitah" styleClass="brand"/>
+        <Label text="Campus social and academic platform" styleClass="muted"/>
+        <Label text="Students: your first sign-in submits an access request to the system administrator. Use your roster student ID and choose a password of at least 8 characters." wrapText="true" styleClass="muted"/>
+        <TextField fx:id="loginId" promptText="Student or system ID" editable="true"/>
+        <StackPane>
+            <PasswordField fx:id="password" promptText="Password" editable="true" onAction="#login"/>
+            <TextField fx:id="visiblePassword" promptText="Password" editable="true" visible="false"
+                       managed="false" onAction="#login"/>
+        </StackPane>
+        <CheckBox fx:id="showPassword" text="Show password" onAction="#togglePasswordVisibility"/>
+        <Label fx:id="errorLabel" wrapText="true" styleClass="error"/>
+        <Button fx:id="loginButton" text="Sign in / Request access" defaultButton="true" maxWidth="Infinity" onAction="#login"/>
+    </VBox>
+</StackPane>

@@ -1,3 +1,7 @@
 #!/usr/bin/env sh
 set -eu
-mvn test
+if command -v xvfb-run >/dev/null 2>&1; then
+  xvfb-run -a mvn clean test
+else
+  mvn clean test
+fi

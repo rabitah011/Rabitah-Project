@@ -17,7 +17,27 @@ Rabitah is a Java 21 university social and academic desktop application. The rep
 5. Confirm `http://localhost:8080/actuator/health` returns `UP`.
 6. In another terminal, start JavaFX: `mvn -f Rabitah-Frontend/pom.xml javafx:run`.
 
-The base seed creates `SYSADMIN`, 720 deterministic roster entries, and 24 community rooms. Use the password supplied through `RABITAH_SYSTEM_ADMIN_PASSWORD`. No runtime secret is committed.
+## One-command launch
+
+Linux (including Parrot/Debian):
+
+```bash
+./run-linux.sh
+```
+
+Windows Command Prompt or PowerShell:
+
+```bat
+run-windows.bat
+```
+
+Both launchers start PostgreSQL, wait for the API to become healthy, and then open the desktop application. They require Java 21, Maven 3.9+, and Docker. The local development SysAdmin credentials are `SYSADMIN` / `Rabitah123!`; override the password with the `RABITAH_SYSTEM_ADMIN_PASSWORD` environment variable outside local development.
+
+## Student approval flow
+
+A roster student enters their student ID and a new password of at least eight characters on the normal sign-in screen. The first attempt creates an access request and does not grant access. SysAdmin reviews it under **Admin Approvals**. After approval, the student signs in with the same credentials. Declined students receive a clear denial message. Student posts and question-paper PDFs also remain hidden until SysAdmin approves them from the same inbox.
+
+The base seed creates `SYSADMIN`, 720 deterministic roster entries, and 24 community rooms. When `RABITAH_DEMO_PASSWORD` is set it also creates active student accounts `CSE1A003`, `EEE2B003`, and `CEE3A003`, plus sample feed, notice, community, and academic data. Use the passwords supplied through the environment; no runtime secret is committed.
 
 ## Verification
 
@@ -27,6 +47,6 @@ Run `mvn test` from the repository root. The backend uses Flyway as the only sch
 
 Use **File → Import → Existing Maven Projects**, select this repository, and import both child projects. Ensure Eclipse uses the Java 21 JDK. Run `RabitahBackendApplication` for the API and `RabitahApplication` for the desktop client.
 
-## Current scope
+## Available platform modules
 
-Consult `IMPLEMENTATION_STATUS.md` before demonstration. Features not marked complete there must not be represented as working.
+The JavaFX shell provides a social feed with reactions/comments, notice board, searchable question repository with PDF uploads, persisted private chat, scoped community history, and read-only profile. Consult `IMPLEMENTATION_STATUS.md` for advanced specification items that remain outstanding.

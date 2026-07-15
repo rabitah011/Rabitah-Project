@@ -2,7 +2,7 @@ spring:
   application:
     name: rabitah-api
   datasource:
-    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/rabitah}
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5433/rabitah}
     username: ${DATABASE_USERNAME:rabitah}
     password: ${DATABASE_PASSWORD:rabitah}
   jpa:
@@ -16,9 +16,15 @@ spring:
     max-request-size: 11MB
   flyway:
     enabled: true
+  data:
+    redis:
+      repositories:
+        enabled: false
 server:
   port: ${PORT:8080}
-management.endpoints.web.exposure.include: health,info
+management:
+  endpoints.web.exposure.include: health,info
+  health.redis.enabled: false
 rabitah:
   seed:
     students-per-section-year: ${RABITAH_STUDENTS_PER_SECTION_YEAR:30}
