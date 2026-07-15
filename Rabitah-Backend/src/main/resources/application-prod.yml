@@ -1,2 +1,8 @@
-server.forward-headers-strategy: framework
 spring.jpa.show-sql: false
+rabitah:
+  discovery:
+    port: ${RABITAH_DISCOVERY_PORT:45871}
+
+server:
+  forward-headers-strategy: framework
+  address: 0.0.0.0
