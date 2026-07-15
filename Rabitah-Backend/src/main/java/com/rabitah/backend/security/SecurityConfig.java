@@ -6,5 +6,5 @@ import org.springframework.beans.factory.annotation.Value; import org.springfram
  @Bean PasswordEncoder passwordEncoder(){return new BCryptPasswordEncoder();}
  @Bean JwtEncoder jwtEncoder(@Value("${rabitah.security.jwt-secret}") String secret){return new NimbusJwtEncoder(new ImmutableSecret<SecurityContext>(new SecretKeySpec(key(secret),"HmacSHA256")));}
  @Bean JwtDecoder jwtDecoder(@Value("${rabitah.security.jwt-secret}") String secret){return NimbusJwtDecoder.withSecretKey(new SecretKeySpec(key(secret),"HmacSHA256")).build();}
- @Bean SecurityFilterChain chain(HttpSecurity http)throws Exception{return http.csrf(c->c.disable()).sessionManagement(s->s.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).authorizeHttpRequests(a->a.requestMatchers("/api/v1/auth/**","/actuator/health").permitAll().anyRequest().authenticated()).oauth2ResourceServer(o->o.jwt(j->{})).build();}
+ @Bean SecurityFilterChain chain(HttpSecurity http)throws Exception{return http.csrf(c->c.disable()).sessionManagement(s->s.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).authorizeHttpRequests(a->a.requestMatchers("/api/v1/auth/**","/actuator/health","/ws/approvals").permitAll().anyRequest().authenticated()).oauth2ResourceServer(o->o.jwt(j->{})).build();}
 }

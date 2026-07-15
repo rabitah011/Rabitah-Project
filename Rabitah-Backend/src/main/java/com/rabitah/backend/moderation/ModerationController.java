@@ -2,6 +2,7 @@ package com.rabitah.backend.moderation;
 
 import com.rabitah.backend.common.ApiException;
 import com.rabitah.backend.security.CurrentUserService;
+import com.rabitah.backend.realtime.ApprovalEvents;
 import com.rabitah.backend.user.Role;
 import com.rabitah.backend.user.User;
 import com.rabitah.backend.user.UserRepository;
@@ -24,11 +25,13 @@ public class ModerationController {
     private final JdbcTemplate jdbc;
     private final CurrentUserService currentUsers;
     private final UserRepository users;
+    private final ApprovalEvents events;
 
-    public ModerationController(JdbcTemplate jdbc, CurrentUserService currentUsers, UserRepository users) {
+    public ModerationController(JdbcTemplate jdbc, CurrentUserService currentUsers, UserRepository users, ApprovalEvents events) {
         this.jdbc = jdbc;
         this.currentUsers = currentUsers;
         this.users = users;
+        this.events = events;
     }
 
     @GetMapping("/summary")
@@ -64,19 +67,19 @@ public class ModerationController {
     @Transactional
     public Map<String,String> decideUser(@PathVariable UUID id,@Valid @RequestBody Decision decision,Authentication auth) {
         requireAdmin(auth); User user=users.findById(id).orElseThrow(()->notFound("USER_NOT_FOUND","User request not found"));
-        if(decision.action().equals("APPROVE"))user.approve();else user.reject(); users.save(user);return Map.of("message","User request "+decision.action().toLowerCase()+"d");
+        if(decision.action().equals("APPROVE"))user.approve();else user.reject(); users.saveAndFlush(user);events.approvalsChanged();return Map.of("message","User request "+decision.action().toLowerCase()+"d");
     }
 
     @PutMapping("/posts/{id}")
     @Transactional
     public Map<String,String> decidePost(@PathVariable UUID id,@Valid @RequestBody Decision decision,Authentication auth) {
-        User admin=requireAdmin(auth);int changed=jdbc.update("update posts set status=?,moderated_by=?,moderated_at=now(),rejection_reason=?,updated_at=now() where id=? and status='PENDING'",decision.action().equals("APPROVE")?"APPROVED":"REJECTED",admin.getId(),decision.reason(),id);if(changed==0)throw notFound("POST_REQUEST_NOT_FOUND","Pending post not found");return Map.of("message","Post "+decision.action().toLowerCase()+"d");
+        User admin=requireAdmin(auth);int changed=jdbc.update("update posts set status=?,moderated_by=?,moderated_at=now(),rejection_reason=?,updated_at=now() where id=? and status='PENDING'",decision.action().equals("APPROVE")?"APPROVED":"REJECTED",admin.getId(),decision.reason(),id);if(changed==0)throw notFound("POST_REQUEST_NOT_FOUND","Pending post not found");events.approvalsChanged();return Map.of("message","Post "+decision.action().toLowerCase()+"d");
     }
 
     @PutMapping("/papers/{id}")
     @Transactional
     public Map<String,String> decidePaper(@PathVariable UUID id,@Valid @RequestBody Decision decision,Authentication auth) {
-        User admin=requireAdmin(auth);int changed=jdbc.update("update question_papers set status=?,moderated_by=?,moderated_at=now(),rejection_reason=? where id=? and status='PENDING'",decision.action().equals("APPROVE")?"APPROVED":"REJECTED",admin.getId(),decision.reason(),id);if(changed==0)throw notFound("PAPER_REQUEST_NOT_FOUND","Pending paper not found");return Map.of("message","Paper "+decision.action().toLowerCase()+"d");
+        User admin=requireAdmin(auth);int changed=jdbc.update("update question_papers set status=?,moderated_by=?,moderated_at=now(),rejection_reason=? where id=? and status='PENDING'",decision.action().equals("APPROVE")?"APPROVED":"REJECTED",admin.getId(),decision.reason(),id);if(changed==0)throw notFound("PAPER_REQUEST_NOT_FOUND","Pending paper not found");events.approvalsChanged();return Map.of("message","Paper "+decision.action().toLowerCase()+"d");
     }
 
     private User requireAdmin(Authentication auth){User u=currentUsers.require(auth);if(u.getRole()!=Role.SYSTEM_ADMIN)throw new ApiException(HttpStatus.FORBIDDEN,"ADMIN_REQUIRED","System administrator access is required");return u;}

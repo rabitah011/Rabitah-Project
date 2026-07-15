@@ -2,6 +2,7 @@ package com.rabitah.backend.post;
 
 import com.rabitah.backend.common.ApiException;
 import com.rabitah.backend.security.CurrentUserService;
+import com.rabitah.backend.realtime.ApprovalEvents;
 import com.rabitah.backend.user.Role;
 import com.rabitah.backend.user.User;
 import jakarta.validation.Valid;
@@ -25,8 +26,9 @@ import org.springframework.web.bind.annotation.*;
 public class PostController {
     private final JdbcTemplate jdbc;
     private final CurrentUserService currentUsers;
+    private final ApprovalEvents events;
 
-    public PostController(JdbcTemplate jdbc, CurrentUserService currentUsers) { this.jdbc = jdbc; this.currentUsers = currentUsers; }
+    public PostController(JdbcTemplate jdbc, CurrentUserService currentUsers, ApprovalEvents events) { this.jdbc = jdbc; this.currentUsers = currentUsers; this.events = events; }
 
     @GetMapping("/posts/feed")
     public List<PostView> feed(Authentication auth) {
@@ -57,6 +59,7 @@ public class PostController {
         String status = user.getRole() == Role.SYSTEM_ADMIN ? "APPROVED" : "PENDING";
         jdbc.update("insert into posts(id,author_id,body,visibility,status,department_code,section_code,academic_year,created_at,updated_at) values(?,?,?,?,?,?,?,?,now(),now())",
                 id,user.getId(),request.body().trim(),"SCOPED",status,empty(request.department()),empty(request.section()),request.academicYear());
+        if ("PENDING".equals(status)) events.approvalsChanged();
         return get(id, auth);
     }
 

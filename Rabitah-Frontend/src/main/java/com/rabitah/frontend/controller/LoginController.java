@@ -25,6 +25,7 @@ public final class LoginController {
     private String waitingId;
     private String waitingPassword;
     private boolean requestRunning;
+    private AutoCloseable realtimeSubscription;
 
     public LoginController(AppContext context) {
         this.context = context;
@@ -33,6 +34,9 @@ public final class LoginController {
     @FXML
     private void initialize() {
         visiblePassword.textProperty().bindBidirectional(password.textProperty());
+        realtimeSubscription = context.approvals().subscribe(() -> Platform.runLater(() -> {
+            if (waitingId != null && approvalPolling != null) attemptLogin(waitingId, waitingPassword, false);
+        }));
         Platform.runLater(loginId::requestFocus);
     }
 
@@ -83,6 +87,7 @@ public final class LoginController {
                         return;
                     }
                     stopPolling();
+                    closeRealtimeSubscription();
                     context.session().open(response);
                     context.router().showShell();
                 }));
@@ -96,7 +101,7 @@ public final class LoginController {
         visiblePassword.setDisable(true);
         showPassword.setDisable(true);
         loginButton.setText("Waiting for approval...");
-        approvalPolling = new Timeline(new KeyFrame(Duration.seconds(2), event -> attemptLogin(waitingId, waitingPassword, false)));
+        approvalPolling = new Timeline(new KeyFrame(Duration.seconds(10), event -> attemptLogin(waitingId, waitingPassword, false)));
         approvalPolling.setCycleCount(Timeline.INDEFINITE);
         approvalPolling.play();
     }
@@ -110,5 +115,10 @@ public final class LoginController {
         showPassword.setDisable(false);
         loginButton.setDisable(false);
         loginButton.setText("Sign in / Request access");
+    }
+
+    private void closeRealtimeSubscription() {
+        try { if (realtimeSubscription != null) realtimeSubscription.close(); } catch (Exception ignored) { }
+        realtimeSubscription = null;
     }
 }

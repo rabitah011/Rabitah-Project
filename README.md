@@ -33,6 +33,18 @@ run-windows.bat
 
 Both launchers start PostgreSQL, wait for the API to become healthy, and then open the desktop application. They require Java 21, Maven 3.9+, and Docker. The local development SysAdmin credentials are `SYSADMIN` / `Rabitah123!`; override the password with the `RABITAH_SYSTEM_ADMIN_PASSWORD` environment variable outside local development.
 
+For a student on another computer on the same local network, run only the client. It discovers the Rabitah server automatically:
+
+```bash
+./run-client-linux.sh
+```
+
+```bat
+run-client-windows.bat
+```
+
+No address needs to be entered. The client sends a local-network discovery request on UDP port 45871, connects to the responding Rabitah server, and then receives approval changes over the `/ws/approvals` WebSocket. A ten-second API refresh remains as a fallback. The server and clients must be on the same local network, and the firewall must allow TCP 8080 and UDP 45871.
+
 ## Student approval flow
 
 A roster student enters their student ID and a new password of at least eight characters on the normal sign-in screen. The first attempt creates an access request and does not grant access. SysAdmin reviews it under **Admin Approvals**. After approval, the student signs in with the same credentials. Declined students receive a clear denial message. Student posts and question-paper PDFs also remain hidden until SysAdmin approves them from the same inbox.

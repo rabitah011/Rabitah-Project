@@ -21,7 +21,7 @@ public final class SceneRouter {
 
     public void start(Stage stage) {
         this.stage = stage;
-        stage.setTitle("Rabitah — campus platform build 2.1");
+        stage.setTitle("Rabitah — campus platform build 3.2");
         stage.setMinWidth(860);
         stage.setMinHeight(540);
 
