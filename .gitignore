@@ -1,0 +1,10 @@
+.env
+target/
+.classpath
+.project
+.settings/
+.idea/
+*.iml
+uploads/
+Rabitah-Frontend/downloads/
+

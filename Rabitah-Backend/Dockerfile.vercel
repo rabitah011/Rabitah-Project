@@ -1,0 +1,5 @@
+FROM eclipse-temurin:21-jre
+WORKDIR /app
+COPY target/rabitah-backend-*.jar app.jar
+ENV PORT=8080
+CMD ["java","-jar","app.jar"]

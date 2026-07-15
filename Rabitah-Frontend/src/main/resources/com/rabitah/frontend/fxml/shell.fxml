@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?><?import javafx.scene.layout.*?>
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.rabitah.frontend.controller.ShellController" styleClass="page"><top><HBox spacing="16" styleClass="topbar"><Label text="Rabitah" styleClass="brand-small"/><Region HBox.hgrow="ALWAYS"/><Label fx:id="welcome"/><Button text="Log out" onAction="#logout"/></HBox></top><center><StackPane><Label text="Your Rabitah session is active." styleClass="muted"/></StackPane></center></BorderPane>

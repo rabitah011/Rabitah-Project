@@ -1,0 +1,3 @@
+package com.rabitah.frontend;
+import static org.junit.jupiter.api.Assertions.*; import java.io.*; import javax.xml.parsers.DocumentBuilderFactory; import org.junit.jupiter.api.Test;
+class FxmlResourcesTest {@Test void allViewsAreWellFormedAndPresent() throws Exception{for(String name:new String[]{"login.fxml","shell.fxml"}){try(InputStream in=getClass().getResourceAsStream("/com/rabitah/frontend/fxml/"+name)){assertNotNull(in,name);var factory=DocumentBuilderFactory.newInstance();factory.setNamespaceAware(true);assertNotNull(factory.newDocumentBuilder().parse(in).getDocumentElement());}}}}

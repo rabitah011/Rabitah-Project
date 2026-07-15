@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: rabitah-api
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/rabitah}
+    username: ${DATABASE_USERNAME:rabitah}
+    password: ${DATABASE_PASSWORD:rabitah}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate.jdbc.time_zone: UTC
+  servlet.multipart:
+    max-file-size: 10MB
+    max-request-size: 11MB
+  flyway:
+    enabled: true
+server:
+  port: ${PORT:8080}
+management.endpoints.web.exposure.include: health,info
+rabitah:
+  seed:
+    students-per-section-year: ${RABITAH_STUDENTS_PER_SECTION_YEAR:30}
+  security:
+    jwt-secret: ${RABITAH_JWT_SECRET:}
+    access-minutes: 30
+    refresh-days: 7
+  storage:
+    local-root: ${RABITAH_UPLOAD_DIR:./uploads}

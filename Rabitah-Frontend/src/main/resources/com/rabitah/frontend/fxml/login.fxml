@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?><?import javafx.scene.layout.*?>
+<StackPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.rabitah.frontend.controller.LoginController" styleClass="page"><VBox maxWidth="420" spacing="18" styleClass="card"><Label text="Rabitah" styleClass="brand"/><Label text="Campus social and academic platform" styleClass="muted"/><TextField fx:id="loginId" promptText="Student or system ID"/><PasswordField fx:id="password" promptText="Password" onAction="#login"/><Label fx:id="errorLabel" wrapText="true" styleClass="error"/><Button fx:id="loginButton" text="Sign in" defaultButton="true" maxWidth="Infinity" onAction="#login"/></VBox></StackPane>
